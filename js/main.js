@@ -58,7 +58,7 @@ function startGame() {
     enemy.style.top = enemy.y + 'px';
     enemy.style.background = `
         transparent
-        url(../image/enemy${getRandomEnemy(MAX_ENEMY)}.png)
+        url(./image/enemy${getRandomEnemy(MAX_ENEMY)}.png)
         center / cover
         no-repeat`;
     gameArea.appendChild(enemy);
