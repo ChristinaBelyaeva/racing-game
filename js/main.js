@@ -1,13 +1,19 @@
 'use strict';
+const MAX_ENEMY = 7;
 
 const score = document.querySelector('.score'),
   start = document.querySelector('.start'),
   gameArea = document.querySelector('.gameArea'),
   car = document.createElement('div');
+
+const music = document.createElement('embed');
+
+music.src = 'audio.mp3';
+
+music.classList.add('visually-hidden');
+
   
 car.classList.add('car');
-
-
 
 const keys = {
   ArrowUp: false,
@@ -27,9 +33,13 @@ function getQuantityElements(heightElement) {
   return document.documentElement.clientHeight / heightElement;
 }
 
-console.log();
+const getRandomEnemy = (max) => Math.floor((Math.random() * max) + 1);
+
 
 function startGame() {
+  document.body.append(music);
+
+
   start.classList.add('hide');
 
   for (let i = 0; i < getQuantityElements(100); i++) {
@@ -46,7 +56,11 @@ function startGame() {
     enemy.y = -100 * setting.traffic * (i + 1);
     enemy.style.left = Math.floor(Math.random() * (gameArea.offsetWidth - 50)) + 'px';
     enemy.style.top = enemy.y + 'px';
-    enemy.style.background = 'transparent url("../image/myEnemy.png") center / cover no-repeat';
+    enemy.style.background = `
+        transparent
+        url(../image/enemy${getRandomEnemy(MAX_ENEMY)}.png)
+        center / cover
+        no-repeat`;
     gameArea.appendChild(enemy);
   }
 
@@ -86,13 +100,17 @@ function playGame() {
 }
 
 function startRun(event) {
-  event.preventDefault();
-  keys[event.key] = true;
+  if (keys.hasOwnProperty(event.key)) {
+    event.preventDefault();
+    keys[event.key] = true;
+  }
 }
 
 function stopRun(event) {
-  event.preventDefault();
+  if (keys.hasOwnProperty(event.key)) {
+    event.preventDefault();
   keys[event.key] = false;
+  }
 }
 
 function moveRoad() {
@@ -122,6 +140,9 @@ function moveEnemy() {
 }
 
 
+
+
 start.addEventListener('click', startGame);
 document.addEventListener('keydown', startRun);
 document.addEventListener('keyup', stopRun);
+
